@@ -6,6 +6,9 @@
 # http://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
 from scrapy import signals
+from house.settings import house_user_agent
+from scrapy.downloadermiddlewares.useragent import UserAgentMiddleware
+import random
 
 
 class HouseSpiderMiddleware(object):
@@ -54,3 +57,11 @@ class HouseSpiderMiddleware(object):
 
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
+
+class houseUseragentMiddleware(UserAgentMiddleware):
+    # 设置User-Agent
+
+    def process_request(self, request, spider):
+        agent = random.choice(house_user_agent)
+        if agent:
+            request.headers.setdefault('User-Agent', agent)
